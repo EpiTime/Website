@@ -18,7 +18,6 @@ func main() {
 		AllowMethods:     []string{"*"},
 		AllowHeaders:     []string{"*"},
 		ExposeHeaders:    []string{"Content-Length"},
-		AllowAllOrigins:  true,
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
 	}))

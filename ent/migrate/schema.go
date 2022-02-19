@@ -12,7 +12,8 @@ var (
 	ProjectsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "name", Type: field.TypeString, Unique: true},
-		{Name: "date", Type: field.TypeTime},
+		{Name: "start", Type: field.TypeTime},
+		{Name: "end", Type: field.TypeTime},
 		{Name: "user_projects", Type: field.TypeInt, Nullable: true},
 	}
 	// ProjectsTable holds the schema information for the "projects" table.
@@ -23,7 +24,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "projects_users_projects",
-				Columns:    []*schema.Column{ProjectsColumns[3]},
+				Columns:    []*schema.Column{ProjectsColumns[4]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

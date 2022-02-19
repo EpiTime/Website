@@ -100,10 +100,17 @@ func Name(v string) predicate.Project {
 	})
 }
 
-// Date applies equality check predicate on the "date" field. It's identical to DateEQ.
-func Date(v time.Time) predicate.Project {
+// Start applies equality check predicate on the "Start" field. It's identical to StartEQ.
+func Start(v time.Time) predicate.Project {
 	return predicate.Project(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldDate), v))
+		s.Where(sql.EQ(s.C(FieldStart), v))
+	})
+}
+
+// End applies equality check predicate on the "end" field. It's identical to EndEQ.
+func End(v time.Time) predicate.Project {
+	return predicate.Project(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldEnd), v))
 	})
 }
 
@@ -218,22 +225,22 @@ func NameContainsFold(v string) predicate.Project {
 	})
 }
 
-// DateEQ applies the EQ predicate on the "date" field.
-func DateEQ(v time.Time) predicate.Project {
+// StartEQ applies the EQ predicate on the "Start" field.
+func StartEQ(v time.Time) predicate.Project {
 	return predicate.Project(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldDate), v))
+		s.Where(sql.EQ(s.C(FieldStart), v))
 	})
 }
 
-// DateNEQ applies the NEQ predicate on the "date" field.
-func DateNEQ(v time.Time) predicate.Project {
+// StartNEQ applies the NEQ predicate on the "Start" field.
+func StartNEQ(v time.Time) predicate.Project {
 	return predicate.Project(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldDate), v))
+		s.Where(sql.NEQ(s.C(FieldStart), v))
 	})
 }
 
-// DateIn applies the In predicate on the "date" field.
-func DateIn(vs ...time.Time) predicate.Project {
+// StartIn applies the In predicate on the "Start" field.
+func StartIn(vs ...time.Time) predicate.Project {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -245,12 +252,12 @@ func DateIn(vs ...time.Time) predicate.Project {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.In(s.C(FieldDate), v...))
+		s.Where(sql.In(s.C(FieldStart), v...))
 	})
 }
 
-// DateNotIn applies the NotIn predicate on the "date" field.
-func DateNotIn(vs ...time.Time) predicate.Project {
+// StartNotIn applies the NotIn predicate on the "Start" field.
+func StartNotIn(vs ...time.Time) predicate.Project {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -262,35 +269,111 @@ func DateNotIn(vs ...time.Time) predicate.Project {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.NotIn(s.C(FieldDate), v...))
+		s.Where(sql.NotIn(s.C(FieldStart), v...))
 	})
 }
 
-// DateGT applies the GT predicate on the "date" field.
-func DateGT(v time.Time) predicate.Project {
+// StartGT applies the GT predicate on the "Start" field.
+func StartGT(v time.Time) predicate.Project {
 	return predicate.Project(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldDate), v))
+		s.Where(sql.GT(s.C(FieldStart), v))
 	})
 }
 
-// DateGTE applies the GTE predicate on the "date" field.
-func DateGTE(v time.Time) predicate.Project {
+// StartGTE applies the GTE predicate on the "Start" field.
+func StartGTE(v time.Time) predicate.Project {
 	return predicate.Project(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldDate), v))
+		s.Where(sql.GTE(s.C(FieldStart), v))
 	})
 }
 
-// DateLT applies the LT predicate on the "date" field.
-func DateLT(v time.Time) predicate.Project {
+// StartLT applies the LT predicate on the "Start" field.
+func StartLT(v time.Time) predicate.Project {
 	return predicate.Project(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldDate), v))
+		s.Where(sql.LT(s.C(FieldStart), v))
 	})
 }
 
-// DateLTE applies the LTE predicate on the "date" field.
-func DateLTE(v time.Time) predicate.Project {
+// StartLTE applies the LTE predicate on the "Start" field.
+func StartLTE(v time.Time) predicate.Project {
 	return predicate.Project(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldDate), v))
+		s.Where(sql.LTE(s.C(FieldStart), v))
+	})
+}
+
+// EndEQ applies the EQ predicate on the "end" field.
+func EndEQ(v time.Time) predicate.Project {
+	return predicate.Project(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldEnd), v))
+	})
+}
+
+// EndNEQ applies the NEQ predicate on the "end" field.
+func EndNEQ(v time.Time) predicate.Project {
+	return predicate.Project(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldEnd), v))
+	})
+}
+
+// EndIn applies the In predicate on the "end" field.
+func EndIn(vs ...time.Time) predicate.Project {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Project(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldEnd), v...))
+	})
+}
+
+// EndNotIn applies the NotIn predicate on the "end" field.
+func EndNotIn(vs ...time.Time) predicate.Project {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Project(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldEnd), v...))
+	})
+}
+
+// EndGT applies the GT predicate on the "end" field.
+func EndGT(v time.Time) predicate.Project {
+	return predicate.Project(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldEnd), v))
+	})
+}
+
+// EndGTE applies the GTE predicate on the "end" field.
+func EndGTE(v time.Time) predicate.Project {
+	return predicate.Project(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldEnd), v))
+	})
+}
+
+// EndLT applies the LT predicate on the "end" field.
+func EndLT(v time.Time) predicate.Project {
+	return predicate.Project(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldEnd), v))
+	})
+}
+
+// EndLTE applies the LTE predicate on the "end" field.
+func EndLTE(v time.Time) predicate.Project {
+	return predicate.Project(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldEnd), v))
 	})
 }
 

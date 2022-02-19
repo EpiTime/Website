@@ -27,9 +27,15 @@ func (pc *ProjectCreate) SetName(s string) *ProjectCreate {
 	return pc
 }
 
-// SetDate sets the "date" field.
-func (pc *ProjectCreate) SetDate(t time.Time) *ProjectCreate {
-	pc.mutation.SetDate(t)
+// SetStart sets the "Start" field.
+func (pc *ProjectCreate) SetStart(t time.Time) *ProjectCreate {
+	pc.mutation.SetStart(t)
+	return pc
+}
+
+// SetEnd sets the "end" field.
+func (pc *ProjectCreate) SetEnd(t time.Time) *ProjectCreate {
+	pc.mutation.SetEnd(t)
 	return pc
 }
 
@@ -125,8 +131,11 @@ func (pc *ProjectCreate) check() error {
 	if _, ok := pc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Project.name"`)}
 	}
-	if _, ok := pc.mutation.Date(); !ok {
-		return &ValidationError{Name: "date", err: errors.New(`ent: missing required field "Project.date"`)}
+	if _, ok := pc.mutation.Start(); !ok {
+		return &ValidationError{Name: "Start", err: errors.New(`ent: missing required field "Project.Start"`)}
+	}
+	if _, ok := pc.mutation.End(); !ok {
+		return &ValidationError{Name: "end", err: errors.New(`ent: missing required field "Project.end"`)}
 	}
 	return nil
 }
@@ -163,13 +172,21 @@ func (pc *ProjectCreate) createSpec() (*Project, *sqlgraph.CreateSpec) {
 		})
 		_node.Name = value
 	}
-	if value, ok := pc.mutation.Date(); ok {
+	if value, ok := pc.mutation.Start(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
 			Value:  value,
-			Column: project.FieldDate,
+			Column: project.FieldStart,
 		})
-		_node.Date = value
+		_node.Start = value
+	}
+	if value, ok := pc.mutation.End(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: project.FieldEnd,
+		})
+		_node.End = value
 	}
 	if nodes := pc.mutation.UserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

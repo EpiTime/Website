@@ -36,7 +36,8 @@ type ProjectMutation struct {
 	typ           string
 	id            *int
 	name          *string
-	date          *time.Time
+	_Start        *time.Time
+	end           *time.Time
 	clearedFields map[string]struct{}
 	user          *int
 	cleareduser   bool
@@ -179,40 +180,76 @@ func (m *ProjectMutation) ResetName() {
 	m.name = nil
 }
 
-// SetDate sets the "date" field.
-func (m *ProjectMutation) SetDate(t time.Time) {
-	m.date = &t
+// SetStart sets the "Start" field.
+func (m *ProjectMutation) SetStart(t time.Time) {
+	m._Start = &t
 }
 
-// Date returns the value of the "date" field in the mutation.
-func (m *ProjectMutation) Date() (r time.Time, exists bool) {
-	v := m.date
+// Start returns the value of the "Start" field in the mutation.
+func (m *ProjectMutation) Start() (r time.Time, exists bool) {
+	v := m._Start
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldDate returns the old "date" field's value of the Project entity.
+// OldStart returns the old "Start" field's value of the Project entity.
 // If the Project object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProjectMutation) OldDate(ctx context.Context) (v time.Time, err error) {
+func (m *ProjectMutation) OldStart(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldDate is only allowed on UpdateOne operations")
+		return v, errors.New("OldStart is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldDate requires an ID field in the mutation")
+		return v, errors.New("OldStart requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldDate: %w", err)
+		return v, fmt.Errorf("querying old value for OldStart: %w", err)
 	}
-	return oldValue.Date, nil
+	return oldValue.Start, nil
 }
 
-// ResetDate resets all changes to the "date" field.
-func (m *ProjectMutation) ResetDate() {
-	m.date = nil
+// ResetStart resets all changes to the "Start" field.
+func (m *ProjectMutation) ResetStart() {
+	m._Start = nil
+}
+
+// SetEnd sets the "end" field.
+func (m *ProjectMutation) SetEnd(t time.Time) {
+	m.end = &t
+}
+
+// End returns the value of the "end" field in the mutation.
+func (m *ProjectMutation) End() (r time.Time, exists bool) {
+	v := m.end
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEnd returns the old "end" field's value of the Project entity.
+// If the Project object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProjectMutation) OldEnd(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEnd is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEnd requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEnd: %w", err)
+	}
+	return oldValue.End, nil
+}
+
+// ResetEnd resets all changes to the "end" field.
+func (m *ProjectMutation) ResetEnd() {
+	m.end = nil
 }
 
 // SetUserID sets the "user" edge to the User entity by id.
@@ -273,12 +310,15 @@ func (m *ProjectMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProjectMutation) Fields() []string {
-	fields := make([]string, 0, 2)
+	fields := make([]string, 0, 3)
 	if m.name != nil {
 		fields = append(fields, project.FieldName)
 	}
-	if m.date != nil {
-		fields = append(fields, project.FieldDate)
+	if m._Start != nil {
+		fields = append(fields, project.FieldStart)
+	}
+	if m.end != nil {
+		fields = append(fields, project.FieldEnd)
 	}
 	return fields
 }
@@ -290,8 +330,10 @@ func (m *ProjectMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case project.FieldName:
 		return m.Name()
-	case project.FieldDate:
-		return m.Date()
+	case project.FieldStart:
+		return m.Start()
+	case project.FieldEnd:
+		return m.End()
 	}
 	return nil, false
 }
@@ -303,8 +345,10 @@ func (m *ProjectMutation) OldField(ctx context.Context, name string) (ent.Value,
 	switch name {
 	case project.FieldName:
 		return m.OldName(ctx)
-	case project.FieldDate:
-		return m.OldDate(ctx)
+	case project.FieldStart:
+		return m.OldStart(ctx)
+	case project.FieldEnd:
+		return m.OldEnd(ctx)
 	}
 	return nil, fmt.Errorf("unknown Project field %s", name)
 }
@@ -321,12 +365,19 @@ func (m *ProjectMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetName(v)
 		return nil
-	case project.FieldDate:
+	case project.FieldStart:
 		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetDate(v)
+		m.SetStart(v)
+		return nil
+	case project.FieldEnd:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEnd(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Project field %s", name)
@@ -380,8 +431,11 @@ func (m *ProjectMutation) ResetField(name string) error {
 	case project.FieldName:
 		m.ResetName()
 		return nil
-	case project.FieldDate:
-		m.ResetDate()
+	case project.FieldStart:
+		m.ResetStart()
+		return nil
+	case project.FieldEnd:
+		m.ResetEnd()
 		return nil
 	}
 	return fmt.Errorf("unknown Project field %s", name)

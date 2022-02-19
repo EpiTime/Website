@@ -35,9 +35,15 @@ func (pu *ProjectUpdate) SetName(s string) *ProjectUpdate {
 	return pu
 }
 
-// SetDate sets the "date" field.
-func (pu *ProjectUpdate) SetDate(t time.Time) *ProjectUpdate {
-	pu.mutation.SetDate(t)
+// SetStart sets the "Start" field.
+func (pu *ProjectUpdate) SetStart(t time.Time) *ProjectUpdate {
+	pu.mutation.SetStart(t)
+	return pu
+}
+
+// SetEnd sets the "end" field.
+func (pu *ProjectUpdate) SetEnd(t time.Time) *ProjectUpdate {
+	pu.mutation.SetEnd(t)
 	return pu
 }
 
@@ -150,11 +156,18 @@ func (pu *ProjectUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: project.FieldName,
 		})
 	}
-	if value, ok := pu.mutation.Date(); ok {
+	if value, ok := pu.mutation.Start(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
 			Value:  value,
-			Column: project.FieldDate,
+			Column: project.FieldStart,
+		})
+	}
+	if value, ok := pu.mutation.End(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: project.FieldEnd,
 		})
 	}
 	if pu.mutation.UserCleared() {
@@ -217,9 +230,15 @@ func (puo *ProjectUpdateOne) SetName(s string) *ProjectUpdateOne {
 	return puo
 }
 
-// SetDate sets the "date" field.
-func (puo *ProjectUpdateOne) SetDate(t time.Time) *ProjectUpdateOne {
-	puo.mutation.SetDate(t)
+// SetStart sets the "Start" field.
+func (puo *ProjectUpdateOne) SetStart(t time.Time) *ProjectUpdateOne {
+	puo.mutation.SetStart(t)
+	return puo
+}
+
+// SetEnd sets the "end" field.
+func (puo *ProjectUpdateOne) SetEnd(t time.Time) *ProjectUpdateOne {
+	puo.mutation.SetEnd(t)
 	return puo
 }
 
@@ -356,11 +375,18 @@ func (puo *ProjectUpdateOne) sqlSave(ctx context.Context) (_node *Project, err e
 			Column: project.FieldName,
 		})
 	}
-	if value, ok := puo.mutation.Date(); ok {
+	if value, ok := puo.mutation.Start(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
 			Value:  value,
-			Column: project.FieldDate,
+			Column: project.FieldStart,
+		})
+	}
+	if value, ok := puo.mutation.End(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: project.FieldEnd,
 		})
 	}
 	if puo.mutation.UserCleared() {

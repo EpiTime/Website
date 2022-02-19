@@ -9,8 +9,10 @@ const (
 	FieldID = "id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
-	// FieldDate holds the string denoting the date field in the database.
-	FieldDate = "date"
+	// FieldStart holds the string denoting the start field in the database.
+	FieldStart = "start"
+	// FieldEnd holds the string denoting the end field in the database.
+	FieldEnd = "end"
 	// EdgeUser holds the string denoting the user edge name in mutations.
 	EdgeUser = "user"
 	// Table holds the table name of the project in the database.
@@ -28,7 +30,8 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldName,
-	FieldDate,
+	FieldStart,
+	FieldEnd,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "projects"

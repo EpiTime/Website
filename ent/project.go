@@ -19,8 +19,10 @@ type Project struct {
 	ID int `json:"id,omitempty"`
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
-	// Date holds the value of the "date" field.
-	Date time.Time `json:"date,omitempty"`
+	// Start holds the value of the "Start" field.
+	Start time.Time `json:"Start,omitempty"`
+	// End holds the value of the "end" field.
+	End time.Time `json:"end,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ProjectQuery when eager-loading is set.
 	Edges         ProjectEdges `json:"edges"`
@@ -59,7 +61,7 @@ func (*Project) scanValues(columns []string) ([]interface{}, error) {
 			values[i] = new(sql.NullInt64)
 		case project.FieldName:
 			values[i] = new(sql.NullString)
-		case project.FieldDate:
+		case project.FieldStart, project.FieldEnd:
 			values[i] = new(sql.NullTime)
 		case project.ForeignKeys[0]: // user_projects
 			values[i] = new(sql.NullInt64)
@@ -90,11 +92,17 @@ func (pr *Project) assignValues(columns []string, values []interface{}) error {
 			} else if value.Valid {
 				pr.Name = value.String
 			}
-		case project.FieldDate:
+		case project.FieldStart:
 			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field date", values[i])
+				return fmt.Errorf("unexpected type %T for field Start", values[i])
 			} else if value.Valid {
-				pr.Date = value.Time
+				pr.Start = value.Time
+			}
+		case project.FieldEnd:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field end", values[i])
+			} else if value.Valid {
+				pr.End = value.Time
 			}
 		case project.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -138,8 +146,10 @@ func (pr *Project) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v", pr.ID))
 	builder.WriteString(", name=")
 	builder.WriteString(pr.Name)
-	builder.WriteString(", date=")
-	builder.WriteString(pr.Date.Format(time.ANSIC))
+	builder.WriteString(", Start=")
+	builder.WriteString(pr.Start.Format(time.ANSIC))
+	builder.WriteString(", end=")
+	builder.WriteString(pr.End.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }
