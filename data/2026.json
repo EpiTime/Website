@@ -1,0 +1,38 @@
+{
+  "modules": [
+    {
+      "name": "Français",
+      "tag": "FRE-C",
+      "color": "green",
+      "project": [
+        {
+          "name": "lettre",
+          "start": "2022-01-19",
+          "end": "2022-02-19"
+        },
+        {
+          "name": "mail",
+          "start": "2022-03-19",
+          "end": "2022-04-19"
+        }
+      ]
+    },
+    {
+      "name": "Math",
+      "tag": "MATH-C",
+      "color": "blue",
+      "project": [
+        {
+          "name": "carré",
+          "start": "2022-01-19",
+          "end": "2022-02-19"
+        },
+        {
+          "name": "rectangle",
+          "start": "2022-03-19",
+          "end": "2022-04-19"
+        }
+      ]
+    }
+  ]
+}
