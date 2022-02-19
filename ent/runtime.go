@@ -2,8 +2,25 @@
 
 package ent
 
+import (
+	"epitime/ent/schema"
+	"epitime/ent/user"
+
+	uuid "github.com/satori/go.uuid"
+)
+
 // The init function reads all schema descriptors with runtime code
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	userFields := schema.User{}.Fields()
+	_ = userFields
+	// userDescYear is the schema descriptor for year field.
+	userDescYear := userFields[2].Descriptor()
+	// user.DefaultYear holds the default value on creation for the year field.
+	user.DefaultYear = userDescYear.Default.(int)
+	// userDescUUID is the schema descriptor for uuid field.
+	userDescUUID := userFields[5].Descriptor()
+	// user.DefaultUUID holds the default value on creation for the uuid field.
+	user.DefaultUUID = userDescUUID.Default.(func() uuid.UUID)
 }

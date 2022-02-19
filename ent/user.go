@@ -8,13 +8,27 @@ import (
 	"strings"
 
 	"entgo.io/ent/dialect/sql"
+
+	uuid "github.com/satori/go.uuid"
 )
 
 // User is the model entity for the User schema.
 type User struct {
-	config
+	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
+	// Email holds the value of the "email" field.
+	Email string `json:"email,omitempty"`
+	// Password holds the value of the "password" field.
+	Password string `json:"password,omitempty"`
+	// Year holds the value of the "year" field.
+	Year int `json:"year,omitempty"`
+	// HideModules holds the value of the "hideModules" field.
+	HideModules string `json:"hideModules,omitempty"`
+	// OthersModules holds the value of the "othersModules" field.
+	OthersModules string `json:"othersModules,omitempty"`
+	// UUID holds the value of the "uuid" field.
+	UUID uuid.UUID `json:"uuid,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -22,8 +36,12 @@ func (*User) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case user.FieldID:
+		case user.FieldID, user.FieldYear:
 			values[i] = new(sql.NullInt64)
+		case user.FieldEmail, user.FieldPassword, user.FieldHideModules, user.FieldOthersModules:
+			values[i] = new(sql.NullString)
+		case user.FieldUUID:
+			values[i] = new(uuid.UUID)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type User", columns[i])
 		}
@@ -45,6 +63,42 @@ func (u *User) assignValues(columns []string, values []interface{}) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			u.ID = int(value.Int64)
+		case user.FieldEmail:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field email", values[i])
+			} else if value.Valid {
+				u.Email = value.String
+			}
+		case user.FieldPassword:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field password", values[i])
+			} else if value.Valid {
+				u.Password = value.String
+			}
+		case user.FieldYear:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field year", values[i])
+			} else if value.Valid {
+				u.Year = int(value.Int64)
+			}
+		case user.FieldHideModules:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field hideModules", values[i])
+			} else if value.Valid {
+				u.HideModules = value.String
+			}
+		case user.FieldOthersModules:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field othersModules", values[i])
+			} else if value.Valid {
+				u.OthersModules = value.String
+			}
+		case user.FieldUUID:
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field uuid", values[i])
+			} else if value != nil {
+				u.UUID = *value
+			}
 		}
 	}
 	return nil
@@ -73,6 +127,18 @@ func (u *User) String() string {
 	var builder strings.Builder
 	builder.WriteString("User(")
 	builder.WriteString(fmt.Sprintf("id=%v", u.ID))
+	builder.WriteString(", email=")
+	builder.WriteString(u.Email)
+	builder.WriteString(", password=")
+	builder.WriteString(u.Password)
+	builder.WriteString(", year=")
+	builder.WriteString(fmt.Sprintf("%v", u.Year))
+	builder.WriteString(", hideModules=")
+	builder.WriteString(u.HideModules)
+	builder.WriteString(", othersModules=")
+	builder.WriteString(u.OthersModules)
+	builder.WriteString(", uuid=")
+	builder.WriteString(fmt.Sprintf("%v", u.UUID))
 	builder.WriteByte(')')
 	return builder.String()
 }

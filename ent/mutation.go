@@ -5,11 +5,13 @@ package ent
 import (
 	"context"
 	"epitime/ent/predicate"
+	"epitime/ent/user"
 	"errors"
 	"fmt"
 	"sync"
 
 	"entgo.io/ent"
+	uuid "github.com/satori/go.uuid"
 )
 
 const (
@@ -30,6 +32,13 @@ type UserMutation struct {
 	op            Op
 	typ           string
 	id            *int
+	email         *string
+	password      *string
+	year          *int
+	addyear       *int
+	hideModules   *string
+	othersModules *string
+	uuid          *uuid.UUID
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*User, error)
@@ -134,6 +143,268 @@ func (m *UserMutation) IDs(ctx context.Context) ([]int, error) {
 	}
 }
 
+// SetEmail sets the "email" field.
+func (m *UserMutation) SetEmail(s string) {
+	m.email = &s
+}
+
+// Email returns the value of the "email" field in the mutation.
+func (m *UserMutation) Email() (r string, exists bool) {
+	v := m.email
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEmail returns the old "email" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldEmail(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEmail is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEmail requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEmail: %w", err)
+	}
+	return oldValue.Email, nil
+}
+
+// ResetEmail resets all changes to the "email" field.
+func (m *UserMutation) ResetEmail() {
+	m.email = nil
+}
+
+// SetPassword sets the "password" field.
+func (m *UserMutation) SetPassword(s string) {
+	m.password = &s
+}
+
+// Password returns the value of the "password" field in the mutation.
+func (m *UserMutation) Password() (r string, exists bool) {
+	v := m.password
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPassword returns the old "password" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldPassword(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPassword is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPassword requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPassword: %w", err)
+	}
+	return oldValue.Password, nil
+}
+
+// ResetPassword resets all changes to the "password" field.
+func (m *UserMutation) ResetPassword() {
+	m.password = nil
+}
+
+// SetYear sets the "year" field.
+func (m *UserMutation) SetYear(i int) {
+	m.year = &i
+	m.addyear = nil
+}
+
+// Year returns the value of the "year" field in the mutation.
+func (m *UserMutation) Year() (r int, exists bool) {
+	v := m.year
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldYear returns the old "year" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldYear(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldYear is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldYear requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldYear: %w", err)
+	}
+	return oldValue.Year, nil
+}
+
+// AddYear adds i to the "year" field.
+func (m *UserMutation) AddYear(i int) {
+	if m.addyear != nil {
+		*m.addyear += i
+	} else {
+		m.addyear = &i
+	}
+}
+
+// AddedYear returns the value that was added to the "year" field in this mutation.
+func (m *UserMutation) AddedYear() (r int, exists bool) {
+	v := m.addyear
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetYear resets all changes to the "year" field.
+func (m *UserMutation) ResetYear() {
+	m.year = nil
+	m.addyear = nil
+}
+
+// SetHideModules sets the "hideModules" field.
+func (m *UserMutation) SetHideModules(s string) {
+	m.hideModules = &s
+}
+
+// HideModules returns the value of the "hideModules" field in the mutation.
+func (m *UserMutation) HideModules() (r string, exists bool) {
+	v := m.hideModules
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHideModules returns the old "hideModules" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldHideModules(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHideModules is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHideModules requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHideModules: %w", err)
+	}
+	return oldValue.HideModules, nil
+}
+
+// ClearHideModules clears the value of the "hideModules" field.
+func (m *UserMutation) ClearHideModules() {
+	m.hideModules = nil
+	m.clearedFields[user.FieldHideModules] = struct{}{}
+}
+
+// HideModulesCleared returns if the "hideModules" field was cleared in this mutation.
+func (m *UserMutation) HideModulesCleared() bool {
+	_, ok := m.clearedFields[user.FieldHideModules]
+	return ok
+}
+
+// ResetHideModules resets all changes to the "hideModules" field.
+func (m *UserMutation) ResetHideModules() {
+	m.hideModules = nil
+	delete(m.clearedFields, user.FieldHideModules)
+}
+
+// SetOthersModules sets the "othersModules" field.
+func (m *UserMutation) SetOthersModules(s string) {
+	m.othersModules = &s
+}
+
+// OthersModules returns the value of the "othersModules" field in the mutation.
+func (m *UserMutation) OthersModules() (r string, exists bool) {
+	v := m.othersModules
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOthersModules returns the old "othersModules" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldOthersModules(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOthersModules is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOthersModules requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOthersModules: %w", err)
+	}
+	return oldValue.OthersModules, nil
+}
+
+// ClearOthersModules clears the value of the "othersModules" field.
+func (m *UserMutation) ClearOthersModules() {
+	m.othersModules = nil
+	m.clearedFields[user.FieldOthersModules] = struct{}{}
+}
+
+// OthersModulesCleared returns if the "othersModules" field was cleared in this mutation.
+func (m *UserMutation) OthersModulesCleared() bool {
+	_, ok := m.clearedFields[user.FieldOthersModules]
+	return ok
+}
+
+// ResetOthersModules resets all changes to the "othersModules" field.
+func (m *UserMutation) ResetOthersModules() {
+	m.othersModules = nil
+	delete(m.clearedFields, user.FieldOthersModules)
+}
+
+// SetUUID sets the "uuid" field.
+func (m *UserMutation) SetUUID(u uuid.UUID) {
+	m.uuid = &u
+}
+
+// UUID returns the value of the "uuid" field in the mutation.
+func (m *UserMutation) UUID() (r uuid.UUID, exists bool) {
+	v := m.uuid
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUUID returns the old "uuid" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldUUID(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUUID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUUID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUUID: %w", err)
+	}
+	return oldValue.UUID, nil
+}
+
+// ResetUUID resets all changes to the "uuid" field.
+func (m *UserMutation) ResetUUID() {
+	m.uuid = nil
+}
+
 // Where appends a list predicates to the UserMutation builder.
 func (m *UserMutation) Where(ps ...predicate.User) {
 	m.predicates = append(m.predicates, ps...)
@@ -153,7 +424,25 @@ func (m *UserMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *UserMutation) Fields() []string {
-	fields := make([]string, 0, 0)
+	fields := make([]string, 0, 6)
+	if m.email != nil {
+		fields = append(fields, user.FieldEmail)
+	}
+	if m.password != nil {
+		fields = append(fields, user.FieldPassword)
+	}
+	if m.year != nil {
+		fields = append(fields, user.FieldYear)
+	}
+	if m.hideModules != nil {
+		fields = append(fields, user.FieldHideModules)
+	}
+	if m.othersModules != nil {
+		fields = append(fields, user.FieldOthersModules)
+	}
+	if m.uuid != nil {
+		fields = append(fields, user.FieldUUID)
+	}
 	return fields
 }
 
@@ -161,6 +450,20 @@ func (m *UserMutation) Fields() []string {
 // return value indicates that this field was not set, or was not defined in the
 // schema.
 func (m *UserMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case user.FieldEmail:
+		return m.Email()
+	case user.FieldPassword:
+		return m.Password()
+	case user.FieldYear:
+		return m.Year()
+	case user.FieldHideModules:
+		return m.HideModules()
+	case user.FieldOthersModules:
+		return m.OthersModules()
+	case user.FieldUUID:
+		return m.UUID()
+	}
 	return nil, false
 }
 
@@ -168,6 +471,20 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 // returned if the mutation operation is not UpdateOne, or the query to the
 // database failed.
 func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case user.FieldEmail:
+		return m.OldEmail(ctx)
+	case user.FieldPassword:
+		return m.OldPassword(ctx)
+	case user.FieldYear:
+		return m.OldYear(ctx)
+	case user.FieldHideModules:
+		return m.OldHideModules(ctx)
+	case user.FieldOthersModules:
+		return m.OldOthersModules(ctx)
+	case user.FieldUUID:
+		return m.OldUUID(ctx)
+	}
 	return nil, fmt.Errorf("unknown User field %s", name)
 }
 
@@ -176,6 +493,48 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 // type.
 func (m *UserMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case user.FieldEmail:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEmail(v)
+		return nil
+	case user.FieldPassword:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPassword(v)
+		return nil
+	case user.FieldYear:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetYear(v)
+		return nil
+	case user.FieldHideModules:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHideModules(v)
+		return nil
+	case user.FieldOthersModules:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOthersModules(v)
+		return nil
+	case user.FieldUUID:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUUID(v)
+		return nil
 	}
 	return fmt.Errorf("unknown User field %s", name)
 }
@@ -183,13 +542,21 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
 func (m *UserMutation) AddedFields() []string {
-	return nil
+	var fields []string
+	if m.addyear != nil {
+		fields = append(fields, user.FieldYear)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
 func (m *UserMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case user.FieldYear:
+		return m.AddedYear()
+	}
 	return nil, false
 }
 
@@ -197,13 +564,29 @@ func (m *UserMutation) AddedField(name string) (ent.Value, bool) {
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
 func (m *UserMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case user.FieldYear:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddYear(v)
+		return nil
+	}
 	return fmt.Errorf("unknown User numeric field %s", name)
 }
 
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *UserMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(user.FieldHideModules) {
+		fields = append(fields, user.FieldHideModules)
+	}
+	if m.FieldCleared(user.FieldOthersModules) {
+		fields = append(fields, user.FieldOthersModules)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -216,12 +599,40 @@ func (m *UserMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *UserMutation) ClearField(name string) error {
+	switch name {
+	case user.FieldHideModules:
+		m.ClearHideModules()
+		return nil
+	case user.FieldOthersModules:
+		m.ClearOthersModules()
+		return nil
+	}
 	return fmt.Errorf("unknown User nullable field %s", name)
 }
 
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
 func (m *UserMutation) ResetField(name string) error {
+	switch name {
+	case user.FieldEmail:
+		m.ResetEmail()
+		return nil
+	case user.FieldPassword:
+		m.ResetPassword()
+		return nil
+	case user.FieldYear:
+		m.ResetYear()
+		return nil
+	case user.FieldHideModules:
+		m.ResetHideModules()
+		return nil
+	case user.FieldOthersModules:
+		m.ResetOthersModules()
+		return nil
+	case user.FieldUUID:
+		m.ResetUUID()
+		return nil
+	}
 	return fmt.Errorf("unknown User field %s", name)
 }
 

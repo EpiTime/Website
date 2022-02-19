@@ -16,9 +16,14 @@ func (User) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("email").
 			Unique(),
-		field.String("data").
-			Default("unknown"),
-		field.UUID("id", uuid.UUID{}).
+		field.String("password"),
+		field.Int("year").
+			Default(2026),
+		field.String("hideModules").
+			Optional(),
+		field.String("othersModules").
+			Optional(),
+		field.UUID("uuid", uuid.UUID{}).
 			Default(uuid.NewV4).
 			Unique(),
 	}

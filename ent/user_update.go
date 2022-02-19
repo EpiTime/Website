@@ -12,6 +12,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+
+	uuid "github.com/satori/go.uuid"
 )
 
 // UserUpdate is the builder for updating User entities.
@@ -24,6 +26,93 @@ type UserUpdate struct {
 // Where appends a list predicates to the UserUpdate builder.
 func (uu *UserUpdate) Where(ps ...predicate.User) *UserUpdate {
 	uu.mutation.Where(ps...)
+	return uu
+}
+
+// SetEmail sets the "email" field.
+func (uu *UserUpdate) SetEmail(s string) *UserUpdate {
+	uu.mutation.SetEmail(s)
+	return uu
+}
+
+// SetPassword sets the "password" field.
+func (uu *UserUpdate) SetPassword(s string) *UserUpdate {
+	uu.mutation.SetPassword(s)
+	return uu
+}
+
+// SetYear sets the "year" field.
+func (uu *UserUpdate) SetYear(i int) *UserUpdate {
+	uu.mutation.ResetYear()
+	uu.mutation.SetYear(i)
+	return uu
+}
+
+// SetNillableYear sets the "year" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableYear(i *int) *UserUpdate {
+	if i != nil {
+		uu.SetYear(*i)
+	}
+	return uu
+}
+
+// AddYear adds i to the "year" field.
+func (uu *UserUpdate) AddYear(i int) *UserUpdate {
+	uu.mutation.AddYear(i)
+	return uu
+}
+
+// SetHideModules sets the "hideModules" field.
+func (uu *UserUpdate) SetHideModules(s string) *UserUpdate {
+	uu.mutation.SetHideModules(s)
+	return uu
+}
+
+// SetNillableHideModules sets the "hideModules" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableHideModules(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetHideModules(*s)
+	}
+	return uu
+}
+
+// ClearHideModules clears the value of the "hideModules" field.
+func (uu *UserUpdate) ClearHideModules() *UserUpdate {
+	uu.mutation.ClearHideModules()
+	return uu
+}
+
+// SetOthersModules sets the "othersModules" field.
+func (uu *UserUpdate) SetOthersModules(s string) *UserUpdate {
+	uu.mutation.SetOthersModules(s)
+	return uu
+}
+
+// SetNillableOthersModules sets the "othersModules" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableOthersModules(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetOthersModules(*s)
+	}
+	return uu
+}
+
+// ClearOthersModules clears the value of the "othersModules" field.
+func (uu *UserUpdate) ClearOthersModules() *UserUpdate {
+	uu.mutation.ClearOthersModules()
+	return uu
+}
+
+// SetUUID sets the "uuid" field.
+func (uu *UserUpdate) SetUUID(u uuid.UUID) *UserUpdate {
+	uu.mutation.SetUUID(u)
+	return uu
+}
+
+// SetNillableUUID sets the "uuid" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableUUID(u *uuid.UUID) *UserUpdate {
+	if u != nil {
+		uu.SetUUID(*u)
+	}
 	return uu
 }
 
@@ -104,6 +193,67 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
+	if value, ok := uu.mutation.Email(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: user.FieldEmail,
+		})
+	}
+	if value, ok := uu.mutation.Password(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: user.FieldPassword,
+		})
+	}
+	if value, ok := uu.mutation.Year(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: user.FieldYear,
+		})
+	}
+	if value, ok := uu.mutation.AddedYear(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: user.FieldYear,
+		})
+	}
+	if value, ok := uu.mutation.HideModules(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: user.FieldHideModules,
+		})
+	}
+	if uu.mutation.HideModulesCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: user.FieldHideModules,
+		})
+	}
+	if value, ok := uu.mutation.OthersModules(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: user.FieldOthersModules,
+		})
+	}
+	if uu.mutation.OthersModulesCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: user.FieldOthersModules,
+		})
+	}
+	if value, ok := uu.mutation.UUID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUUID,
+			Value:  value,
+			Column: user.FieldUUID,
+		})
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, uu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{user.Label}
@@ -121,6 +271,93 @@ type UserUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *UserMutation
+}
+
+// SetEmail sets the "email" field.
+func (uuo *UserUpdateOne) SetEmail(s string) *UserUpdateOne {
+	uuo.mutation.SetEmail(s)
+	return uuo
+}
+
+// SetPassword sets the "password" field.
+func (uuo *UserUpdateOne) SetPassword(s string) *UserUpdateOne {
+	uuo.mutation.SetPassword(s)
+	return uuo
+}
+
+// SetYear sets the "year" field.
+func (uuo *UserUpdateOne) SetYear(i int) *UserUpdateOne {
+	uuo.mutation.ResetYear()
+	uuo.mutation.SetYear(i)
+	return uuo
+}
+
+// SetNillableYear sets the "year" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableYear(i *int) *UserUpdateOne {
+	if i != nil {
+		uuo.SetYear(*i)
+	}
+	return uuo
+}
+
+// AddYear adds i to the "year" field.
+func (uuo *UserUpdateOne) AddYear(i int) *UserUpdateOne {
+	uuo.mutation.AddYear(i)
+	return uuo
+}
+
+// SetHideModules sets the "hideModules" field.
+func (uuo *UserUpdateOne) SetHideModules(s string) *UserUpdateOne {
+	uuo.mutation.SetHideModules(s)
+	return uuo
+}
+
+// SetNillableHideModules sets the "hideModules" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableHideModules(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetHideModules(*s)
+	}
+	return uuo
+}
+
+// ClearHideModules clears the value of the "hideModules" field.
+func (uuo *UserUpdateOne) ClearHideModules() *UserUpdateOne {
+	uuo.mutation.ClearHideModules()
+	return uuo
+}
+
+// SetOthersModules sets the "othersModules" field.
+func (uuo *UserUpdateOne) SetOthersModules(s string) *UserUpdateOne {
+	uuo.mutation.SetOthersModules(s)
+	return uuo
+}
+
+// SetNillableOthersModules sets the "othersModules" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableOthersModules(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetOthersModules(*s)
+	}
+	return uuo
+}
+
+// ClearOthersModules clears the value of the "othersModules" field.
+func (uuo *UserUpdateOne) ClearOthersModules() *UserUpdateOne {
+	uuo.mutation.ClearOthersModules()
+	return uuo
+}
+
+// SetUUID sets the "uuid" field.
+func (uuo *UserUpdateOne) SetUUID(u uuid.UUID) *UserUpdateOne {
+	uuo.mutation.SetUUID(u)
+	return uuo
+}
+
+// SetNillableUUID sets the "uuid" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableUUID(u *uuid.UUID) *UserUpdateOne {
+	if u != nil {
+		uuo.SetUUID(*u)
+	}
+	return uuo
 }
 
 // Mutation returns the UserMutation object of the builder.
@@ -223,6 +460,67 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := uuo.mutation.Email(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: user.FieldEmail,
+		})
+	}
+	if value, ok := uuo.mutation.Password(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: user.FieldPassword,
+		})
+	}
+	if value, ok := uuo.mutation.Year(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: user.FieldYear,
+		})
+	}
+	if value, ok := uuo.mutation.AddedYear(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: user.FieldYear,
+		})
+	}
+	if value, ok := uuo.mutation.HideModules(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: user.FieldHideModules,
+		})
+	}
+	if uuo.mutation.HideModulesCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: user.FieldHideModules,
+		})
+	}
+	if value, ok := uuo.mutation.OthersModules(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: user.FieldOthersModules,
+		})
+	}
+	if uuo.mutation.OthersModulesCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: user.FieldOthersModules,
+		})
+	}
+	if value, ok := uuo.mutation.UUID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUUID,
+			Value:  value,
+			Column: user.FieldUUID,
+		})
 	}
 	_node = &User{config: uuo.config}
 	_spec.Assign = _node.assignValues

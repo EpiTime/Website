@@ -1,58 +1,85 @@
 package routes
 
 import (
+	"context"
+	"epitime/ent"
+	"epitime/ent/user"
+	"fmt"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"log"
+	"net/http"
 )
 
-type User struct {
+type UserStruct struct {
 	Email    string
 	Password string
 }
 
-var Users []User
+func setupUser(ctx *gin.Context, client *ent.Client) {
 
-func AddUser(email, password string) bool {
-	for _, user := range Users {
-		if user.Email == email {
-			return false
+}
+
+func createUser(ctx *gin.Context, client *ent.Client, email, password string) (*ent.User, error) {
+	u, err := client.User.Create().
+		SetEmail(email).
+		SetPassword(password).
+		Save(ctx)
+	sess := sessions.Default(ctx)
+	e := sess.Get("year")
+	if e != nil {
+		if err != nil {
+			log.Fatal(err.Error())
+			return nil, err
 		}
 	}
-	Users = append(Users, User{
-		Email:    email,
-		Password: password,
-	})
-	return true
+	if err != nil {
+		return nil, fmt.Errorf("failed creating user: %w", err)
+	}
+	return u, err
 }
 
-func SignUp(c *gin.Context) {
-	body := new(User)
-	if err := c.ShouldBindJSON(body); err != nil {
-		c.AbortWithStatus(400)
+func SignItUp(ctx context.Context, client *ent.Client) gin.HandlerFunc {
+	f := func(c *gin.Context) {
+		u := new(UserStruct)
+		if err := c.ShouldBindJSON(u); err != nil {
+			c.AbortWithStatus(400)
+			return
+		}
+		_, err := client.User.Query().Where(user.Email(u.Email)).All(c)
+		if err == nil {
+			_, err := createUser(c, client, u.Email, u.Password)
+			c.String(200, "Successfully connected")
+			if err != nil {
+				return
+			}
+		}
 		return
 	}
-	c.JSON(200, body)
-	AddUser(body.Email, body.Password)
-	return
+	return f
 }
 
-func SignIn(c *gin.Context) {
-	body := new(User)
-	if err := c.ShouldBindJSON(body); err != nil {
-		c.AbortWithStatus(400)
-		return
-	}
-	for _, v := range Users {
-		if v.Email == body.Email && v.Password == body.Password {
+func SignItIn(c context.Context, client *ent.Client) (f gin.HandlerFunc) {
+	f = func(c *gin.Context) {
+		u := new(UserStruct)
+		if err := c.ShouldBindJSON(u); err != nil {
+			c.AbortWithStatus(400)
+			return
+		}
+		e, _ := client.User.Query().Where(user.Email(u.Email)).All(c)
+		if e[0].Password == u.Password {
 			session := sessions.Default(c)
-			session.Set("email", body.Email)
+			session.Set("email", u.Email)
 			err := session.Save()
 			if err != nil {
 				return
 			}
-			c.String(200, "CONNECTED")
+			c.String(200, "Nice you connected")
 			return
 		}
+		c.String(http.StatusUnauthorized, "Bad mdp")
 	}
-	c.String(400, "NO USERS")
+	return
 }
+
+//	u := dba.Client.Artist.Query().Where(artist.ID(uuid2.UUID(id))).AllX(ctx)

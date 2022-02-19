@@ -2,11 +2,25 @@
 
 package user
 
+import uuid "github.com/satori/go.uuid"
+
 const (
 	// Label holds the string label denoting the user type in the database.
 	Label = "user"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldEmail holds the string denoting the email field in the database.
+	FieldEmail = "email"
+	// FieldPassword holds the string denoting the password field in the database.
+	FieldPassword = "password"
+	// FieldYear holds the string denoting the year field in the database.
+	FieldYear = "year"
+	// FieldHideModules holds the string denoting the hidemodules field in the database.
+	FieldHideModules = "hide_modules"
+	// FieldOthersModules holds the string denoting the othersmodules field in the database.
+	FieldOthersModules = "others_modules"
+	// FieldUUID holds the string denoting the uuid field in the database.
+	FieldUUID = "uuid"
 	// Table holds the table name of the user in the database.
 	Table = "users"
 )
@@ -14,6 +28,12 @@ const (
 // Columns holds all SQL columns for user fields.
 var Columns = []string{
 	FieldID,
+	FieldEmail,
+	FieldPassword,
+	FieldYear,
+	FieldHideModules,
+	FieldOthersModules,
+	FieldUUID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -25,3 +45,10 @@ func ValidColumn(column string) bool {
 	}
 	return false
 }
+
+var (
+	// DefaultYear holds the default value on creation for the "year" field.
+	DefaultYear int
+	// DefaultUUID holds the default value on creation for the "uuid" field.
+	DefaultUUID func() uuid.UUID
+)

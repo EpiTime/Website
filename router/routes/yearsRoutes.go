@@ -29,7 +29,7 @@ type formatJson3 struct {
 	End   string `json:"end"`
 }
 
-type formatJson2 struct {
+type FormatJson2 struct {
 	Name    string        `json:"name"`
 	Tag     string        `json:"tag"`
 	Color   string        `json:"color"`
@@ -37,7 +37,7 @@ type formatJson2 struct {
 }
 
 type FormatJson struct {
-	Modules []formatJson2 `json:"modules"`
+	Modules []FormatJson2 `json:"modules"`
 }
 
 func isIn(listHide []string, mod string) bool {
@@ -67,22 +67,25 @@ func SingleOut(fullJson FormatJson, sess sessions.Session) FormatJson {
 
 func ShowTimeline(c *gin.Context) {
 	session := sessions.Default(c)
-	year := session.Get("year").(string)
-	if isValidYear(year) {
-		file, err := ioutil.ReadFile(fmt.Sprintf("data/%s.json", year))
-		if err != nil {
+	if session.Get("year") != nil {
+		year := session.Get("year").(string)
+		if isValidYear(year) {
+			file, err := ioutil.ReadFile(fmt.Sprintf("data/%s.json", year))
+			if err != nil {
+				return
+			}
+			var json1 = FormatJson{}
+			err = json.Unmarshal(file, &json1)
+			if err != nil {
+				return
+			}
+			jsonTrie := SingleOut(json1, session)
+			c.JSON(200, jsonTrie)
 			return
 		}
-		var json1 = FormatJson{}
-		err = json.Unmarshal(file, &json1)
-		if err != nil {
-			return
-		}
-		jsonTrie := SingleOut(json1, session)
-		c.JSON(200, jsonTrie)
-		return
+		c.String(400, "Year does not exist")
 	}
-	c.String(400, "Year does not exist")
+	c.String(400, "Year not set up")
 }
 
 func Years(c *gin.Context) {

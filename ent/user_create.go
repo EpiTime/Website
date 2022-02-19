@@ -5,10 +5,12 @@ package ent
 import (
 	"context"
 	"epitime/ent/user"
+	"errors"
 	"fmt"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	uuid "github.com/satori/go.uuid"
 )
 
 // UserCreate is the builder for creating a User entity.
@@ -16,6 +18,74 @@ type UserCreate struct {
 	config
 	mutation *UserMutation
 	hooks    []Hook
+}
+
+// SetEmail sets the "email" field.
+func (uc *UserCreate) SetEmail(s string) *UserCreate {
+	uc.mutation.SetEmail(s)
+	return uc
+}
+
+// SetPassword sets the "password" field.
+func (uc *UserCreate) SetPassword(s string) *UserCreate {
+	uc.mutation.SetPassword(s)
+	return uc
+}
+
+// SetYear sets the "year" field.
+func (uc *UserCreate) SetYear(i int) *UserCreate {
+	uc.mutation.SetYear(i)
+	return uc
+}
+
+// SetNillableYear sets the "year" field if the given value is not nil.
+func (uc *UserCreate) SetNillableYear(i *int) *UserCreate {
+	if i != nil {
+		uc.SetYear(*i)
+	}
+	return uc
+}
+
+// SetHideModules sets the "hideModules" field.
+func (uc *UserCreate) SetHideModules(s string) *UserCreate {
+	uc.mutation.SetHideModules(s)
+	return uc
+}
+
+// SetNillableHideModules sets the "hideModules" field if the given value is not nil.
+func (uc *UserCreate) SetNillableHideModules(s *string) *UserCreate {
+	if s != nil {
+		uc.SetHideModules(*s)
+	}
+	return uc
+}
+
+// SetOthersModules sets the "othersModules" field.
+func (uc *UserCreate) SetOthersModules(s string) *UserCreate {
+	uc.mutation.SetOthersModules(s)
+	return uc
+}
+
+// SetNillableOthersModules sets the "othersModules" field if the given value is not nil.
+func (uc *UserCreate) SetNillableOthersModules(s *string) *UserCreate {
+	if s != nil {
+		uc.SetOthersModules(*s)
+	}
+	return uc
+}
+
+// SetUUID sets the "uuid" field.
+func (uc *UserCreate) SetUUID(u uuid.UUID) *UserCreate {
+	uc.mutation.SetUUID(u)
+	return uc
+}
+
+// SetNillableUUID sets the "uuid" field if the given value is not nil.
+func (uc *UserCreate) SetNillableUUID(u *uuid.UUID) *UserCreate {
+	if u != nil {
+		uc.SetUUID(*u)
+	}
+	return uc
 }
 
 // Mutation returns the UserMutation object of the builder.
@@ -29,6 +99,7 @@ func (uc *UserCreate) Save(ctx context.Context) (*User, error) {
 		err  error
 		node *User
 	)
+	uc.defaults()
 	if len(uc.hooks) == 0 {
 		if err = uc.check(); err != nil {
 			return nil, err
@@ -86,8 +157,32 @@ func (uc *UserCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (uc *UserCreate) defaults() {
+	if _, ok := uc.mutation.Year(); !ok {
+		v := user.DefaultYear
+		uc.mutation.SetYear(v)
+	}
+	if _, ok := uc.mutation.UUID(); !ok {
+		v := user.DefaultUUID()
+		uc.mutation.SetUUID(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (uc *UserCreate) check() error {
+	if _, ok := uc.mutation.Email(); !ok {
+		return &ValidationError{Name: "email", err: errors.New(`ent: missing required field "User.email"`)}
+	}
+	if _, ok := uc.mutation.Password(); !ok {
+		return &ValidationError{Name: "password", err: errors.New(`ent: missing required field "User.password"`)}
+	}
+	if _, ok := uc.mutation.Year(); !ok {
+		return &ValidationError{Name: "year", err: errors.New(`ent: missing required field "User.year"`)}
+	}
+	if _, ok := uc.mutation.UUID(); !ok {
+		return &ValidationError{Name: "uuid", err: errors.New(`ent: missing required field "User.uuid"`)}
+	}
 	return nil
 }
 
@@ -115,6 +210,54 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 			},
 		}
 	)
+	if value, ok := uc.mutation.Email(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: user.FieldEmail,
+		})
+		_node.Email = value
+	}
+	if value, ok := uc.mutation.Password(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: user.FieldPassword,
+		})
+		_node.Password = value
+	}
+	if value, ok := uc.mutation.Year(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: user.FieldYear,
+		})
+		_node.Year = value
+	}
+	if value, ok := uc.mutation.HideModules(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: user.FieldHideModules,
+		})
+		_node.HideModules = value
+	}
+	if value, ok := uc.mutation.OthersModules(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: user.FieldOthersModules,
+		})
+		_node.OthersModules = value
+	}
+	if value, ok := uc.mutation.UUID(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeUUID,
+			Value:  value,
+			Column: user.FieldUUID,
+		})
+		_node.UUID = value
+	}
 	return _node, _spec
 }
 
@@ -132,6 +275,7 @@ func (ucb *UserCreateBulk) Save(ctx context.Context) ([]*User, error) {
 	for i := range ucb.builders {
 		func(i int, root context.Context) {
 			builder := ucb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*UserMutation)
 				if !ok {

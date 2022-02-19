@@ -11,6 +11,12 @@ var (
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "email", Type: field.TypeString, Unique: true},
+		{Name: "password", Type: field.TypeString},
+		{Name: "year", Type: field.TypeInt, Default: 2026},
+		{Name: "hide_modules", Type: field.TypeString, Nullable: true},
+		{Name: "others_modules", Type: field.TypeString, Nullable: true},
+		{Name: "uuid", Type: field.TypeUUID, Unique: true},
 	}
 	// UsersTable holds the schema information for the "users" table.
 	UsersTable = &schema.Table{
