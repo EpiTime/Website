@@ -15,7 +15,8 @@ type Project struct {
 func (Project) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").Unique(),
-		field.Time("date"),
+		field.Time("Start"),
+		field.Time("end"),
 	}
 }
 

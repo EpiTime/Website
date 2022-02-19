@@ -37,7 +37,7 @@ func Open(databaseUrl string) *ent.Client {
 func NewEntDatabase() Database {
 	var err error
 	var dba = Database{}
-	dba.Client = Open("postgresql://root:password@127.0.0.1:5432/my_database")
+	dba.Client = Open("postgresql://api:password@127.0.0.1:5432/epitime")
 	if err != nil {
 		log.Fatalf("failed opening connection to postgres: %v", err)
 	}
