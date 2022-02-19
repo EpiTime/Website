@@ -30,10 +30,10 @@ type formatJson3 struct {
 }
 
 type formatJson2 struct {
-	Name   string        `json:"name"`
-	Tag    string        `json:"tag"`
-	Color  string        `json:"color"`
-	Projet []formatJson3 `json:"projet"`
+	Name    string        `json:"name"`
+	Tag     string        `json:"tag"`
+	Color   string        `json:"color"`
+	Project []formatJson3 `json:"project"`
 }
 
 type FormatJson struct {
