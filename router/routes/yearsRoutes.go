@@ -1,12 +1,19 @@
 package routes
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
+	"strconv"
 )
+
+type database interface {
+	UpdateUserYear(ctx context.Context, email string, year int) error
+	UpdateUserHideModules(ctx context.Context, email string, hideModules string) error
+}
 
 func isValidYear(year string) bool {
 	var currentYears [5]string
@@ -67,38 +74,51 @@ func SingleOut(fullJson FormatJson, sess sessions.Session) FormatJson {
 
 func ShowTimeline(c *gin.Context) {
 	session := sessions.Default(c)
-	if session.Get("year") != nil {
-		year := session.Get("year").(string)
-		if isValidYear(year) {
-			file, err := ioutil.ReadFile(fmt.Sprintf("data/%s.json", year))
-			if err != nil {
-				return
-			}
-			var json1 = FormatJson{}
-			err = json.Unmarshal(file, &json1)
-			if err != nil {
-				return
-			}
-			jsonTrie := SingleOut(json1, session)
-			c.JSON(200, jsonTrie)
-			return
-		}
+	if !(session.Get("year") != nil) {
+		c.String(400, "Year not set up")
+	}
+	year := session.Get("year").(string)
+	if !isValidYear(year) {
 		c.String(400, "Year does not exist")
 	}
-	c.String(400, "Year not set up")
+	fmt.Printf("|%s|", year)
+	file, err := ioutil.ReadFile(fmt.Sprintf("data/%s.json", year))
+	if err != nil {
+		return
+	}
+	var json1 = FormatJson{}
+	err = json.Unmarshal(file, &json1)
+	if err != nil {
+		return
+	}
+	jsonTrie := SingleOut(json1, session)
+	c.JSON(200, jsonTrie)
+	return
+
 }
 
-func Years(c *gin.Context) {
-	year := c.Param("year")
-	if isValidYear(year) {
+func Years(dba database) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		year := c.Param("year")
+		if !isValidYear(year) {
+			c.String(400, "Year does not exist")
+			return
+		}
+		yearInt, _ := strconv.Atoi(year)
 		session := sessions.Default(c)
 		session.Set("year", year)
 		err := session.Save()
+		email := session.Get("email")
+		if email != nil {
+			err := dba.UpdateUserYear(c.Request.Context(), email.(string), yearInt)
+			if err != nil {
+				return
+			}
+		}
 		if err != nil {
 			return
 		}
 		c.Status(200)
 		return
 	}
-	c.String(400, "Year does not exist")
 }

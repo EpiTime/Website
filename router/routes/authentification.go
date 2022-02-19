@@ -9,6 +9,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
+	"strconv"
+	"strings"
 )
 
 type UserStruct struct {
@@ -70,6 +72,13 @@ func SignItIn(c context.Context, client *ent.Client) (f gin.HandlerFunc) {
 		if e[0].Password == u.Password {
 			session := sessions.Default(c)
 			session.Set("email", u.Email)
+			if len(e[0].HideModules) > 0 {
+				session.Set("modules-hide", strings.Split(e[0].HideModules, ","))
+			}
+			if e[0].Year > 0 {
+				ye := strconv.Itoa(e[0].Year)
+				session.Set("year", ye)
+			}
 			err := session.Save()
 			if err != nil {
 				return

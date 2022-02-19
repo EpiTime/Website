@@ -7,8 +7,7 @@ import (
 )
 
 func main() {
-	dba := database.Database{}
-	dba.Client = database.NewEntDatabase(dba)
+	dba := database.NewEntDatabase()
 	//user, err := create_user(context.Background(), dba)
 	//fmt.Println(user)
 	Engine := serverGest.NewServer()

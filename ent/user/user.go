@@ -21,8 +21,17 @@ const (
 	FieldOthersModules = "others_modules"
 	// FieldUUID holds the string denoting the uuid field in the database.
 	FieldUUID = "uuid"
+	// EdgeProjects holds the string denoting the projects edge name in mutations.
+	EdgeProjects = "projects"
 	// Table holds the table name of the user in the database.
 	Table = "users"
+	// ProjectsTable is the table that holds the projects relation/edge.
+	ProjectsTable = "projects"
+	// ProjectsInverseTable is the table name for the Project entity.
+	// It exists in this package in order to avoid circular dependency with the "project" package.
+	ProjectsInverseTable = "projects"
+	// ProjectsColumn is the table column denoting the projects relation/edge.
+	ProjectsColumn = "user_projects"
 )
 
 // Columns holds all SQL columns for user fields.

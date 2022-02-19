@@ -6,6 +6,7 @@ import (
 	"epitime/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	uuid "github.com/satori/go.uuid"
 )
 
@@ -755,6 +756,34 @@ func UUIDLT(v uuid.UUID) predicate.User {
 func UUIDLTE(v uuid.UUID) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldUUID), v))
+	})
+}
+
+// HasProjects applies the HasEdge predicate on the "projects" edge.
+func HasProjects() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.To(ProjectsTable, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ProjectsTable, ProjectsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProjectsWith applies the HasEdge predicate on the "projects" edge with a given conditions (other predicates).
+func HasProjectsWith(preds ...predicate.Project) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.To(ProjectsInverseTable, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ProjectsTable, ProjectsColumn),
+		)
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
 	})
 }
 

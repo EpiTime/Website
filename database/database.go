@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 	"entgo.io/ent/dialect"
+	"epitime/ent/user"
 
 	"database/sql"
 	entsql "entgo.io/ent/dialect/sql"
@@ -16,6 +17,14 @@ type Database struct {
 	Client *ent.Client
 }
 
+func (dba Database) UpdateUserYear(ctx context.Context, email string, year int) error {
+	return dba.Client.User.Update().Where(user.Email(email)).SetYear(year).Exec(ctx)
+}
+
+func (dba Database) UpdateUserHideModules(ctx context.Context, email string, hideModules string) error {
+	return dba.Client.User.Update().Where(user.Email(email)).SetHideModules(hideModules).Exec(ctx)
+}
+
 func Open(databaseUrl string) *ent.Client {
 	db, err := sql.Open("pgx", databaseUrl)
 	if err != nil {
@@ -25,8 +34,9 @@ func Open(databaseUrl string) *ent.Client {
 	return ent.NewClient(ent.Driver(drv))
 }
 
-func NewEntDatabase(dba Database) *ent.Client {
+func NewEntDatabase() Database {
 	var err error
+	var dba = Database{}
 	dba.Client = Open("postgresql://root:password@127.0.0.1:5432/my_database")
 	if err != nil {
 		log.Fatalf("failed opening connection to postgres: %v", err)
@@ -35,5 +45,5 @@ func NewEntDatabase(dba Database) *ent.Client {
 		log.Fatalf("failed creating schema resources: %v", err)
 	}
 	fmt.Println("successful !")
-	return dba.Client
+	return dba
 }
