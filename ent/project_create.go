@@ -6,9 +6,7 @@ import (
 	"context"
 	"epitime/ent/project"
 	"epitime/ent/user"
-	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -27,15 +25,39 @@ func (pc *ProjectCreate) SetName(s string) *ProjectCreate {
 	return pc
 }
 
+// SetNillableName sets the "name" field if the given value is not nil.
+func (pc *ProjectCreate) SetNillableName(s *string) *ProjectCreate {
+	if s != nil {
+		pc.SetName(*s)
+	}
+	return pc
+}
+
 // SetStart sets the "Start" field.
-func (pc *ProjectCreate) SetStart(t time.Time) *ProjectCreate {
-	pc.mutation.SetStart(t)
+func (pc *ProjectCreate) SetStart(s string) *ProjectCreate {
+	pc.mutation.SetStart(s)
+	return pc
+}
+
+// SetNillableStart sets the "Start" field if the given value is not nil.
+func (pc *ProjectCreate) SetNillableStart(s *string) *ProjectCreate {
+	if s != nil {
+		pc.SetStart(*s)
+	}
 	return pc
 }
 
 // SetEnd sets the "end" field.
-func (pc *ProjectCreate) SetEnd(t time.Time) *ProjectCreate {
-	pc.mutation.SetEnd(t)
+func (pc *ProjectCreate) SetEnd(s string) *ProjectCreate {
+	pc.mutation.SetEnd(s)
+	return pc
+}
+
+// SetNillableEnd sets the "end" field if the given value is not nil.
+func (pc *ProjectCreate) SetNillableEnd(s *string) *ProjectCreate {
+	if s != nil {
+		pc.SetEnd(*s)
+	}
 	return pc
 }
 
@@ -128,15 +150,6 @@ func (pc *ProjectCreate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (pc *ProjectCreate) check() error {
-	if _, ok := pc.mutation.Name(); !ok {
-		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Project.name"`)}
-	}
-	if _, ok := pc.mutation.Start(); !ok {
-		return &ValidationError{Name: "Start", err: errors.New(`ent: missing required field "Project.Start"`)}
-	}
-	if _, ok := pc.mutation.End(); !ok {
-		return &ValidationError{Name: "end", err: errors.New(`ent: missing required field "Project.end"`)}
-	}
 	return nil
 }
 
@@ -174,7 +187,7 @@ func (pc *ProjectCreate) createSpec() (*Project, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := pc.mutation.Start(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
+			Type:   field.TypeString,
 			Value:  value,
 			Column: project.FieldStart,
 		})
@@ -182,7 +195,7 @@ func (pc *ProjectCreate) createSpec() (*Project, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := pc.mutation.End(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
+			Type:   field.TypeString,
 			Value:  value,
 			Column: project.FieldEnd,
 		})

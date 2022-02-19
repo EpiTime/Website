@@ -14,9 +14,9 @@ type Project struct {
 // Fields of the Project.
 func (Project) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("name").Unique(),
-		field.Time("Start"),
-		field.Time("end"),
+		field.String("name").Optional(),
+		field.String("Start").Optional(),
+		field.String("end").Optional(),
 	}
 }
 

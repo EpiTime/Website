@@ -10,7 +10,6 @@ import (
 	"errors"
 	"fmt"
 	"sync"
-	"time"
 
 	"entgo.io/ent"
 	uuid "github.com/satori/go.uuid"
@@ -36,8 +35,8 @@ type ProjectMutation struct {
 	typ           string
 	id            *int
 	name          *string
-	_Start        *time.Time
-	end           *time.Time
+	_Start        *string
+	end           *string
 	clearedFields map[string]struct{}
 	user          *int
 	cleareduser   bool
@@ -175,18 +174,31 @@ func (m *ProjectMutation) OldName(ctx context.Context) (v string, err error) {
 	return oldValue.Name, nil
 }
 
+// ClearName clears the value of the "name" field.
+func (m *ProjectMutation) ClearName() {
+	m.name = nil
+	m.clearedFields[project.FieldName] = struct{}{}
+}
+
+// NameCleared returns if the "name" field was cleared in this mutation.
+func (m *ProjectMutation) NameCleared() bool {
+	_, ok := m.clearedFields[project.FieldName]
+	return ok
+}
+
 // ResetName resets all changes to the "name" field.
 func (m *ProjectMutation) ResetName() {
 	m.name = nil
+	delete(m.clearedFields, project.FieldName)
 }
 
 // SetStart sets the "Start" field.
-func (m *ProjectMutation) SetStart(t time.Time) {
-	m._Start = &t
+func (m *ProjectMutation) SetStart(s string) {
+	m._Start = &s
 }
 
 // Start returns the value of the "Start" field in the mutation.
-func (m *ProjectMutation) Start() (r time.Time, exists bool) {
+func (m *ProjectMutation) Start() (r string, exists bool) {
 	v := m._Start
 	if v == nil {
 		return
@@ -197,7 +209,7 @@ func (m *ProjectMutation) Start() (r time.Time, exists bool) {
 // OldStart returns the old "Start" field's value of the Project entity.
 // If the Project object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProjectMutation) OldStart(ctx context.Context) (v time.Time, err error) {
+func (m *ProjectMutation) OldStart(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldStart is only allowed on UpdateOne operations")
 	}
@@ -211,18 +223,31 @@ func (m *ProjectMutation) OldStart(ctx context.Context) (v time.Time, err error)
 	return oldValue.Start, nil
 }
 
+// ClearStart clears the value of the "Start" field.
+func (m *ProjectMutation) ClearStart() {
+	m._Start = nil
+	m.clearedFields[project.FieldStart] = struct{}{}
+}
+
+// StartCleared returns if the "Start" field was cleared in this mutation.
+func (m *ProjectMutation) StartCleared() bool {
+	_, ok := m.clearedFields[project.FieldStart]
+	return ok
+}
+
 // ResetStart resets all changes to the "Start" field.
 func (m *ProjectMutation) ResetStart() {
 	m._Start = nil
+	delete(m.clearedFields, project.FieldStart)
 }
 
 // SetEnd sets the "end" field.
-func (m *ProjectMutation) SetEnd(t time.Time) {
-	m.end = &t
+func (m *ProjectMutation) SetEnd(s string) {
+	m.end = &s
 }
 
 // End returns the value of the "end" field in the mutation.
-func (m *ProjectMutation) End() (r time.Time, exists bool) {
+func (m *ProjectMutation) End() (r string, exists bool) {
 	v := m.end
 	if v == nil {
 		return
@@ -233,7 +258,7 @@ func (m *ProjectMutation) End() (r time.Time, exists bool) {
 // OldEnd returns the old "end" field's value of the Project entity.
 // If the Project object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProjectMutation) OldEnd(ctx context.Context) (v time.Time, err error) {
+func (m *ProjectMutation) OldEnd(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldEnd is only allowed on UpdateOne operations")
 	}
@@ -247,9 +272,22 @@ func (m *ProjectMutation) OldEnd(ctx context.Context) (v time.Time, err error) {
 	return oldValue.End, nil
 }
 
+// ClearEnd clears the value of the "end" field.
+func (m *ProjectMutation) ClearEnd() {
+	m.end = nil
+	m.clearedFields[project.FieldEnd] = struct{}{}
+}
+
+// EndCleared returns if the "end" field was cleared in this mutation.
+func (m *ProjectMutation) EndCleared() bool {
+	_, ok := m.clearedFields[project.FieldEnd]
+	return ok
+}
+
 // ResetEnd resets all changes to the "end" field.
 func (m *ProjectMutation) ResetEnd() {
 	m.end = nil
+	delete(m.clearedFields, project.FieldEnd)
 }
 
 // SetUserID sets the "user" edge to the User entity by id.
@@ -366,14 +404,14 @@ func (m *ProjectMutation) SetField(name string, value ent.Value) error {
 		m.SetName(v)
 		return nil
 	case project.FieldStart:
-		v, ok := value.(time.Time)
+		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetStart(v)
 		return nil
 	case project.FieldEnd:
-		v, ok := value.(time.Time)
+		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -408,7 +446,17 @@ func (m *ProjectMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *ProjectMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(project.FieldName) {
+		fields = append(fields, project.FieldName)
+	}
+	if m.FieldCleared(project.FieldStart) {
+		fields = append(fields, project.FieldStart)
+	}
+	if m.FieldCleared(project.FieldEnd) {
+		fields = append(fields, project.FieldEnd)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -421,6 +469,17 @@ func (m *ProjectMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *ProjectMutation) ClearField(name string) error {
+	switch name {
+	case project.FieldName:
+		m.ClearName()
+		return nil
+	case project.FieldStart:
+		m.ClearStart()
+		return nil
+	case project.FieldEnd:
+		m.ClearEnd()
+		return nil
+	}
 	return fmt.Errorf("unknown Project nullable field %s", name)
 }
 

@@ -9,7 +9,6 @@ import (
 	"epitime/ent/user"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -35,15 +34,57 @@ func (pu *ProjectUpdate) SetName(s string) *ProjectUpdate {
 	return pu
 }
 
+// SetNillableName sets the "name" field if the given value is not nil.
+func (pu *ProjectUpdate) SetNillableName(s *string) *ProjectUpdate {
+	if s != nil {
+		pu.SetName(*s)
+	}
+	return pu
+}
+
+// ClearName clears the value of the "name" field.
+func (pu *ProjectUpdate) ClearName() *ProjectUpdate {
+	pu.mutation.ClearName()
+	return pu
+}
+
 // SetStart sets the "Start" field.
-func (pu *ProjectUpdate) SetStart(t time.Time) *ProjectUpdate {
-	pu.mutation.SetStart(t)
+func (pu *ProjectUpdate) SetStart(s string) *ProjectUpdate {
+	pu.mutation.SetStart(s)
+	return pu
+}
+
+// SetNillableStart sets the "Start" field if the given value is not nil.
+func (pu *ProjectUpdate) SetNillableStart(s *string) *ProjectUpdate {
+	if s != nil {
+		pu.SetStart(*s)
+	}
+	return pu
+}
+
+// ClearStart clears the value of the "Start" field.
+func (pu *ProjectUpdate) ClearStart() *ProjectUpdate {
+	pu.mutation.ClearStart()
 	return pu
 }
 
 // SetEnd sets the "end" field.
-func (pu *ProjectUpdate) SetEnd(t time.Time) *ProjectUpdate {
-	pu.mutation.SetEnd(t)
+func (pu *ProjectUpdate) SetEnd(s string) *ProjectUpdate {
+	pu.mutation.SetEnd(s)
+	return pu
+}
+
+// SetNillableEnd sets the "end" field if the given value is not nil.
+func (pu *ProjectUpdate) SetNillableEnd(s *string) *ProjectUpdate {
+	if s != nil {
+		pu.SetEnd(*s)
+	}
+	return pu
+}
+
+// ClearEnd clears the value of the "end" field.
+func (pu *ProjectUpdate) ClearEnd() *ProjectUpdate {
+	pu.mutation.ClearEnd()
 	return pu
 }
 
@@ -156,17 +197,35 @@ func (pu *ProjectUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: project.FieldName,
 		})
 	}
+	if pu.mutation.NameCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: project.FieldName,
+		})
+	}
 	if value, ok := pu.mutation.Start(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
+			Type:   field.TypeString,
 			Value:  value,
+			Column: project.FieldStart,
+		})
+	}
+	if pu.mutation.StartCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
 			Column: project.FieldStart,
 		})
 	}
 	if value, ok := pu.mutation.End(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
+			Type:   field.TypeString,
 			Value:  value,
+			Column: project.FieldEnd,
+		})
+	}
+	if pu.mutation.EndCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
 			Column: project.FieldEnd,
 		})
 	}
@@ -230,15 +289,57 @@ func (puo *ProjectUpdateOne) SetName(s string) *ProjectUpdateOne {
 	return puo
 }
 
+// SetNillableName sets the "name" field if the given value is not nil.
+func (puo *ProjectUpdateOne) SetNillableName(s *string) *ProjectUpdateOne {
+	if s != nil {
+		puo.SetName(*s)
+	}
+	return puo
+}
+
+// ClearName clears the value of the "name" field.
+func (puo *ProjectUpdateOne) ClearName() *ProjectUpdateOne {
+	puo.mutation.ClearName()
+	return puo
+}
+
 // SetStart sets the "Start" field.
-func (puo *ProjectUpdateOne) SetStart(t time.Time) *ProjectUpdateOne {
-	puo.mutation.SetStart(t)
+func (puo *ProjectUpdateOne) SetStart(s string) *ProjectUpdateOne {
+	puo.mutation.SetStart(s)
+	return puo
+}
+
+// SetNillableStart sets the "Start" field if the given value is not nil.
+func (puo *ProjectUpdateOne) SetNillableStart(s *string) *ProjectUpdateOne {
+	if s != nil {
+		puo.SetStart(*s)
+	}
+	return puo
+}
+
+// ClearStart clears the value of the "Start" field.
+func (puo *ProjectUpdateOne) ClearStart() *ProjectUpdateOne {
+	puo.mutation.ClearStart()
 	return puo
 }
 
 // SetEnd sets the "end" field.
-func (puo *ProjectUpdateOne) SetEnd(t time.Time) *ProjectUpdateOne {
-	puo.mutation.SetEnd(t)
+func (puo *ProjectUpdateOne) SetEnd(s string) *ProjectUpdateOne {
+	puo.mutation.SetEnd(s)
+	return puo
+}
+
+// SetNillableEnd sets the "end" field if the given value is not nil.
+func (puo *ProjectUpdateOne) SetNillableEnd(s *string) *ProjectUpdateOne {
+	if s != nil {
+		puo.SetEnd(*s)
+	}
+	return puo
+}
+
+// ClearEnd clears the value of the "end" field.
+func (puo *ProjectUpdateOne) ClearEnd() *ProjectUpdateOne {
+	puo.mutation.ClearEnd()
 	return puo
 }
 
@@ -375,17 +476,35 @@ func (puo *ProjectUpdateOne) sqlSave(ctx context.Context) (_node *Project, err e
 			Column: project.FieldName,
 		})
 	}
+	if puo.mutation.NameCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: project.FieldName,
+		})
+	}
 	if value, ok := puo.mutation.Start(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
+			Type:   field.TypeString,
 			Value:  value,
+			Column: project.FieldStart,
+		})
+	}
+	if puo.mutation.StartCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
 			Column: project.FieldStart,
 		})
 	}
 	if value, ok := puo.mutation.End(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
+			Type:   field.TypeString,
 			Value:  value,
+			Column: project.FieldEnd,
+		})
+	}
+	if puo.mutation.EndCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
 			Column: project.FieldEnd,
 		})
 	}

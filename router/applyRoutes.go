@@ -21,4 +21,5 @@ func ApplyRoutes(serv *gin.Engine, dba database.Database) {
 	serv.POST("/modules/toggle-display/:mod", routes.Modules(dba)) // met le module dans la liste des hide / retire le module de la liste des hides
 	serv.GET("/modules/hidden", routes.GetModules)                 // renvoie un array des modules hide
 	serv.GET("/modules", routes.ShowTimeline)                      // renvoie un json avec les modules de la year qui ne sont pas hide
+	serv.POST("/modules/add", routes.AddModules(dba))
 }

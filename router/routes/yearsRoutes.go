@@ -63,7 +63,6 @@ func SingleOut(fullJson FormatJson, sess sessions.Session) FormatJson {
 	}
 	listHide := sess.Get("modules-hide").([]string)
 	var viewedJson FormatJson
-
 	for _, v := range fullJson.Modules {
 		if !isIn(listHide, v.Name) {
 			viewedJson.Modules = append(viewedJson.Modules, v)
@@ -81,7 +80,6 @@ func ShowTimeline(c *gin.Context) {
 	if !isValidYear(year) {
 		c.String(400, "Year does not exist")
 	}
-	fmt.Printf("|%s|", year)
 	file, err := ioutil.ReadFile(fmt.Sprintf("data/%s.json", year))
 	if err != nil {
 		return
