@@ -1,6 +1,9 @@
 package routes
 
 import (
+	database2 "epitime/database"
+	"epitime/ent/user"
+	"fmt"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"strings"
@@ -25,6 +28,7 @@ func manageModules(sessionInter interface{}, str string) []string {
 	}
 	return addIt(hideModules, str)
 }
+
 func Modules(dba database) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		session := sessions.Default(c)
@@ -54,7 +58,35 @@ func Modules(dba database) gin.HandlerFunc {
 		}
 	}
 }
+
 func GetModules(c *gin.Context) {
 	session := sessions.Default(c)
 	c.JSON(200, session.Get("modules-hide"))
+}
+
+type ModuleStruct struct {
+	Name  string
+	Start string
+	End   string
+}
+
+func AddModules(dba database2.Database) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		m := new(ModuleStruct)
+		if err := c.ShouldBindJSON(m); err != nil {
+			c.AbortWithStatus(400)
+			return
+		}
+		sess := sessions.Default(c)
+		email := sess.Get("email")
+		adr, err := dba.Client.Project.Create().SetName(m.Name).SetStart(m.Start).SetEnd(m.End).Save(c)
+		if err != nil {
+			fmt.Println("error")
+			return
+		}
+		_, err = dba.Client.User.Update().Where(user.Email(email.(string))).AddProjects(adr).Save(c.Request.Context())
+		if err != nil {
+			return
+		}
+	}
 }

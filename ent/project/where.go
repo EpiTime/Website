@@ -4,7 +4,6 @@ package project
 
 import (
 	"epitime/ent/predicate"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -101,14 +100,14 @@ func Name(v string) predicate.Project {
 }
 
 // Start applies equality check predicate on the "Start" field. It's identical to StartEQ.
-func Start(v time.Time) predicate.Project {
+func Start(v string) predicate.Project {
 	return predicate.Project(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldStart), v))
 	})
 }
 
 // End applies equality check predicate on the "end" field. It's identical to EndEQ.
-func End(v time.Time) predicate.Project {
+func End(v string) predicate.Project {
 	return predicate.Project(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldEnd), v))
 	})
@@ -211,6 +210,20 @@ func NameHasSuffix(v string) predicate.Project {
 	})
 }
 
+// NameIsNil applies the IsNil predicate on the "name" field.
+func NameIsNil() predicate.Project {
+	return predicate.Project(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldName)))
+	})
+}
+
+// NameNotNil applies the NotNil predicate on the "name" field.
+func NameNotNil() predicate.Project {
+	return predicate.Project(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldName)))
+	})
+}
+
 // NameEqualFold applies the EqualFold predicate on the "name" field.
 func NameEqualFold(v string) predicate.Project {
 	return predicate.Project(func(s *sql.Selector) {
@@ -226,21 +239,21 @@ func NameContainsFold(v string) predicate.Project {
 }
 
 // StartEQ applies the EQ predicate on the "Start" field.
-func StartEQ(v time.Time) predicate.Project {
+func StartEQ(v string) predicate.Project {
 	return predicate.Project(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldStart), v))
 	})
 }
 
 // StartNEQ applies the NEQ predicate on the "Start" field.
-func StartNEQ(v time.Time) predicate.Project {
+func StartNEQ(v string) predicate.Project {
 	return predicate.Project(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldStart), v))
 	})
 }
 
 // StartIn applies the In predicate on the "Start" field.
-func StartIn(vs ...time.Time) predicate.Project {
+func StartIn(vs ...string) predicate.Project {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -257,7 +270,7 @@ func StartIn(vs ...time.Time) predicate.Project {
 }
 
 // StartNotIn applies the NotIn predicate on the "Start" field.
-func StartNotIn(vs ...time.Time) predicate.Project {
+func StartNotIn(vs ...string) predicate.Project {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -274,49 +287,98 @@ func StartNotIn(vs ...time.Time) predicate.Project {
 }
 
 // StartGT applies the GT predicate on the "Start" field.
-func StartGT(v time.Time) predicate.Project {
+func StartGT(v string) predicate.Project {
 	return predicate.Project(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldStart), v))
 	})
 }
 
 // StartGTE applies the GTE predicate on the "Start" field.
-func StartGTE(v time.Time) predicate.Project {
+func StartGTE(v string) predicate.Project {
 	return predicate.Project(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldStart), v))
 	})
 }
 
 // StartLT applies the LT predicate on the "Start" field.
-func StartLT(v time.Time) predicate.Project {
+func StartLT(v string) predicate.Project {
 	return predicate.Project(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldStart), v))
 	})
 }
 
 // StartLTE applies the LTE predicate on the "Start" field.
-func StartLTE(v time.Time) predicate.Project {
+func StartLTE(v string) predicate.Project {
 	return predicate.Project(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldStart), v))
 	})
 }
 
+// StartContains applies the Contains predicate on the "Start" field.
+func StartContains(v string) predicate.Project {
+	return predicate.Project(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldStart), v))
+	})
+}
+
+// StartHasPrefix applies the HasPrefix predicate on the "Start" field.
+func StartHasPrefix(v string) predicate.Project {
+	return predicate.Project(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldStart), v))
+	})
+}
+
+// StartHasSuffix applies the HasSuffix predicate on the "Start" field.
+func StartHasSuffix(v string) predicate.Project {
+	return predicate.Project(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldStart), v))
+	})
+}
+
+// StartIsNil applies the IsNil predicate on the "Start" field.
+func StartIsNil() predicate.Project {
+	return predicate.Project(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldStart)))
+	})
+}
+
+// StartNotNil applies the NotNil predicate on the "Start" field.
+func StartNotNil() predicate.Project {
+	return predicate.Project(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldStart)))
+	})
+}
+
+// StartEqualFold applies the EqualFold predicate on the "Start" field.
+func StartEqualFold(v string) predicate.Project {
+	return predicate.Project(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldStart), v))
+	})
+}
+
+// StartContainsFold applies the ContainsFold predicate on the "Start" field.
+func StartContainsFold(v string) predicate.Project {
+	return predicate.Project(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldStart), v))
+	})
+}
+
 // EndEQ applies the EQ predicate on the "end" field.
-func EndEQ(v time.Time) predicate.Project {
+func EndEQ(v string) predicate.Project {
 	return predicate.Project(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldEnd), v))
 	})
 }
 
 // EndNEQ applies the NEQ predicate on the "end" field.
-func EndNEQ(v time.Time) predicate.Project {
+func EndNEQ(v string) predicate.Project {
 	return predicate.Project(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldEnd), v))
 	})
 }
 
 // EndIn applies the In predicate on the "end" field.
-func EndIn(vs ...time.Time) predicate.Project {
+func EndIn(vs ...string) predicate.Project {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -333,7 +395,7 @@ func EndIn(vs ...time.Time) predicate.Project {
 }
 
 // EndNotIn applies the NotIn predicate on the "end" field.
-func EndNotIn(vs ...time.Time) predicate.Project {
+func EndNotIn(vs ...string) predicate.Project {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -350,30 +412,79 @@ func EndNotIn(vs ...time.Time) predicate.Project {
 }
 
 // EndGT applies the GT predicate on the "end" field.
-func EndGT(v time.Time) predicate.Project {
+func EndGT(v string) predicate.Project {
 	return predicate.Project(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldEnd), v))
 	})
 }
 
 // EndGTE applies the GTE predicate on the "end" field.
-func EndGTE(v time.Time) predicate.Project {
+func EndGTE(v string) predicate.Project {
 	return predicate.Project(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldEnd), v))
 	})
 }
 
 // EndLT applies the LT predicate on the "end" field.
-func EndLT(v time.Time) predicate.Project {
+func EndLT(v string) predicate.Project {
 	return predicate.Project(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldEnd), v))
 	})
 }
 
 // EndLTE applies the LTE predicate on the "end" field.
-func EndLTE(v time.Time) predicate.Project {
+func EndLTE(v string) predicate.Project {
 	return predicate.Project(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldEnd), v))
+	})
+}
+
+// EndContains applies the Contains predicate on the "end" field.
+func EndContains(v string) predicate.Project {
+	return predicate.Project(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldEnd), v))
+	})
+}
+
+// EndHasPrefix applies the HasPrefix predicate on the "end" field.
+func EndHasPrefix(v string) predicate.Project {
+	return predicate.Project(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldEnd), v))
+	})
+}
+
+// EndHasSuffix applies the HasSuffix predicate on the "end" field.
+func EndHasSuffix(v string) predicate.Project {
+	return predicate.Project(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldEnd), v))
+	})
+}
+
+// EndIsNil applies the IsNil predicate on the "end" field.
+func EndIsNil() predicate.Project {
+	return predicate.Project(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldEnd)))
+	})
+}
+
+// EndNotNil applies the NotNil predicate on the "end" field.
+func EndNotNil() predicate.Project {
+	return predicate.Project(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldEnd)))
+	})
+}
+
+// EndEqualFold applies the EqualFold predicate on the "end" field.
+func EndEqualFold(v string) predicate.Project {
+	return predicate.Project(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldEnd), v))
+	})
+}
+
+// EndContainsFold applies the ContainsFold predicate on the "end" field.
+func EndContainsFold(v string) predicate.Project {
+	return predicate.Project(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldEnd), v))
 	})
 }
 
