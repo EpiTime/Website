@@ -2,20 +2,37 @@ package main
 
 import (
 	"epitime/database"
-	"epitime/router"
-	"epitime/server"
-	"github.com/gin-contrib/cors"
+	routes "epitime/router"
+	"github.com/gin-gonic/gin"
+	"log"
 )
+
+func CORSMiddleware() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		ctx.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		ctx.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+		ctx.Writer.Header().Set("Access-Control-Allow-Headers", "*")
+		ctx.Writer.Header().Set("Access-Control-Allow-Methods", "*")
+		ctx.Writer.Header().Set("Content-Type", "application/json")
+
+		if ctx.Request.Method == "OPTIONS" {
+			ctx.AbortWithStatus(204)
+			return
+		}
+
+		ctx.Next()
+	}
+}
 
 func main() {
 	dba := database.NewEntDatabase()
-	//user, err := create_user(context.Background(), dba)
-	//fmt.Println(user)
-	Engine := serverGest.NewServer()
-	Engine.E.Use(cors.Default())
-	routes.ApplyRoutes(Engine.E, dba)
-	err := Engine.E.Run()
+	router := gin.Default()
+
+	router.Use(CORSMiddleware())
+	routes.ApplyRoutes(router, dba)
+	err := router.Run()
 	if err != nil {
+		log.Fatal(err.Error())
 		return
 	}
 }

@@ -7,6 +7,7 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
+	"log"
 	"strconv"
 )
 
@@ -89,6 +90,7 @@ func ShowTimeline(c *gin.Context) {
 	var json1 = FormatJson{}
 	err = json.Unmarshal(file, &json1)
 	if err != nil {
+		log.Fatal(err.Error())
 		return
 	}
 	jsonTrie := SingleOut(json1, session)
