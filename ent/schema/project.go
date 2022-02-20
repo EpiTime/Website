@@ -15,7 +15,7 @@ type Project struct {
 func (Project) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").Optional(),
-		field.String("Start").Optional(),
+		field.String("start").Optional(),
 		field.String("end").Optional(),
 	}
 }

@@ -48,13 +48,13 @@ func (pu *ProjectUpdate) ClearName() *ProjectUpdate {
 	return pu
 }
 
-// SetStart sets the "Start" field.
+// SetStart sets the "start" field.
 func (pu *ProjectUpdate) SetStart(s string) *ProjectUpdate {
 	pu.mutation.SetStart(s)
 	return pu
 }
 
-// SetNillableStart sets the "Start" field if the given value is not nil.
+// SetNillableStart sets the "start" field if the given value is not nil.
 func (pu *ProjectUpdate) SetNillableStart(s *string) *ProjectUpdate {
 	if s != nil {
 		pu.SetStart(*s)
@@ -62,7 +62,7 @@ func (pu *ProjectUpdate) SetNillableStart(s *string) *ProjectUpdate {
 	return pu
 }
 
-// ClearStart clears the value of the "Start" field.
+// ClearStart clears the value of the "start" field.
 func (pu *ProjectUpdate) ClearStart() *ProjectUpdate {
 	pu.mutation.ClearStart()
 	return pu
@@ -303,13 +303,13 @@ func (puo *ProjectUpdateOne) ClearName() *ProjectUpdateOne {
 	return puo
 }
 
-// SetStart sets the "Start" field.
+// SetStart sets the "start" field.
 func (puo *ProjectUpdateOne) SetStart(s string) *ProjectUpdateOne {
 	puo.mutation.SetStart(s)
 	return puo
 }
 
-// SetNillableStart sets the "Start" field if the given value is not nil.
+// SetNillableStart sets the "start" field if the given value is not nil.
 func (puo *ProjectUpdateOne) SetNillableStart(s *string) *ProjectUpdateOne {
 	if s != nil {
 		puo.SetStart(*s)
@@ -317,7 +317,7 @@ func (puo *ProjectUpdateOne) SetNillableStart(s *string) *ProjectUpdateOne {
 	return puo
 }
 
-// ClearStart clears the value of the "Start" field.
+// ClearStart clears the value of the "start" field.
 func (puo *ProjectUpdateOne) ClearStart() *ProjectUpdateOne {
 	puo.mutation.ClearStart()
 	return puo

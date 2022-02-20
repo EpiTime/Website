@@ -9,16 +9,15 @@ import (
 
 func CORSMiddleware() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		ctx.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-		ctx.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
-		ctx.Writer.Header().Set("Access-Control-Allow-Headers", "*")
-		ctx.Writer.Header().Set("Access-Control-Allow-Methods", "*")
-		ctx.Writer.Header().Set("Content-Type", "application/json")
-
-		if ctx.Request.Method == "OPTIONS" {
-			ctx.AbortWithStatus(204)
-			return
-		}
+		ctx.Header("Access-Control-Allow-Origin", "*")
+		ctx.Header("Cache-Control", "private, max-age=0")
+		ctx.Header("Access-Control-Allow-Methods", "*")
+		ctx.Header("Access-Control-Allow-Headers", "*")
+		//ctx.Header("Content-Encoding", "gzip")
+		//ctx.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+		//ctx.Writer.Header().Set("Access-Control-Allow-Headers", "*")
+		//ctx.Writer.Header().Set("Access-Control-Allow-Methods", "GET, PUT")
+		//ctx.Writer.Header().Set("Content-Type", "application/json")
 
 		ctx.Next()
 	}
@@ -28,7 +27,7 @@ func main() {
 	dba := database.NewEntDatabase()
 	router := gin.Default()
 
-	router.Use(CORSMiddleware())
+	//router.Use(CORSMiddleware())
 	routes.ApplyRoutes(router, dba)
 	err := router.Run()
 	if err != nil {

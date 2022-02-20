@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
 	"log"
+	"net/http"
 	"strconv"
 )
 
@@ -92,7 +93,11 @@ func ShowTimeline(c *gin.Context) {
 		return
 	}
 	jsonTrie := SingleOut(json1, session)
-	c.JSON(200, jsonTrie)
+	rawJson, _ := json.Marshal(jsonTrie)
+	jsonData := []byte(rawJson)
+
+	c.Data(http.StatusOK, "application/json", jsonData)
+	//c.JSON(200, jsonTrie)
 	return
 
 }

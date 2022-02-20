@@ -35,7 +35,7 @@ type ProjectMutation struct {
 	typ           string
 	id            *int
 	name          *string
-	_Start        *string
+	start         *string
 	end           *string
 	clearedFields map[string]struct{}
 	user          *int
@@ -192,21 +192,21 @@ func (m *ProjectMutation) ResetName() {
 	delete(m.clearedFields, project.FieldName)
 }
 
-// SetStart sets the "Start" field.
+// SetStart sets the "start" field.
 func (m *ProjectMutation) SetStart(s string) {
-	m._Start = &s
+	m.start = &s
 }
 
-// Start returns the value of the "Start" field in the mutation.
+// Start returns the value of the "start" field in the mutation.
 func (m *ProjectMutation) Start() (r string, exists bool) {
-	v := m._Start
+	v := m.start
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldStart returns the old "Start" field's value of the Project entity.
+// OldStart returns the old "start" field's value of the Project entity.
 // If the Project object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *ProjectMutation) OldStart(ctx context.Context) (v string, err error) {
@@ -223,21 +223,21 @@ func (m *ProjectMutation) OldStart(ctx context.Context) (v string, err error) {
 	return oldValue.Start, nil
 }
 
-// ClearStart clears the value of the "Start" field.
+// ClearStart clears the value of the "start" field.
 func (m *ProjectMutation) ClearStart() {
-	m._Start = nil
+	m.start = nil
 	m.clearedFields[project.FieldStart] = struct{}{}
 }
 
-// StartCleared returns if the "Start" field was cleared in this mutation.
+// StartCleared returns if the "start" field was cleared in this mutation.
 func (m *ProjectMutation) StartCleared() bool {
 	_, ok := m.clearedFields[project.FieldStart]
 	return ok
 }
 
-// ResetStart resets all changes to the "Start" field.
+// ResetStart resets all changes to the "start" field.
 func (m *ProjectMutation) ResetStart() {
-	m._Start = nil
+	m.start = nil
 	delete(m.clearedFields, project.FieldStart)
 }
 
@@ -352,7 +352,7 @@ func (m *ProjectMutation) Fields() []string {
 	if m.name != nil {
 		fields = append(fields, project.FieldName)
 	}
-	if m._Start != nil {
+	if m.start != nil {
 		fields = append(fields, project.FieldStart)
 	}
 	if m.end != nil {

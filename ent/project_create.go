@@ -33,13 +33,13 @@ func (pc *ProjectCreate) SetNillableName(s *string) *ProjectCreate {
 	return pc
 }
 
-// SetStart sets the "Start" field.
+// SetStart sets the "start" field.
 func (pc *ProjectCreate) SetStart(s string) *ProjectCreate {
 	pc.mutation.SetStart(s)
 	return pc
 }
 
-// SetNillableStart sets the "Start" field if the given value is not nil.
+// SetNillableStart sets the "start" field if the given value is not nil.
 func (pc *ProjectCreate) SetNillableStart(s *string) *ProjectCreate {
 	if s != nil {
 		pc.SetStart(*s)

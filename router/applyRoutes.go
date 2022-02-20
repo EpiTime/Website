@@ -4,6 +4,7 @@ import (
 	"context"
 	"epitime/database"
 	"epitime/router/routes"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
@@ -12,6 +13,7 @@ import (
 func ApplyRoutes(serv *gin.Engine, dba database.Database) {
 	store := cookie.NewStore([]byte("session"))
 	serv.Use(sessions.Sessions("session", store))
+	serv.Use(cors.Default())
 
 	serv.GET("/health", routes.Health)
 	serv.GET("/getme", routes.GetMe)

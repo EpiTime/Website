@@ -18,8 +18,8 @@ type Project struct {
 	ID int `json:"id,omitempty"`
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
-	// Start holds the value of the "Start" field.
-	Start string `json:"Start,omitempty"`
+	// Start holds the value of the "start" field.
+	Start string `json:"start,omitempty"`
 	// End holds the value of the "end" field.
 	End string `json:"end,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -91,7 +91,7 @@ func (pr *Project) assignValues(columns []string, values []interface{}) error {
 			}
 		case project.FieldStart:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field Start", values[i])
+				return fmt.Errorf("unexpected type %T for field start", values[i])
 			} else if value.Valid {
 				pr.Start = value.String
 			}
@@ -143,7 +143,7 @@ func (pr *Project) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v", pr.ID))
 	builder.WriteString(", name=")
 	builder.WriteString(pr.Name)
-	builder.WriteString(", Start=")
+	builder.WriteString(", start=")
 	builder.WriteString(pr.Start)
 	builder.WriteString(", end=")
 	builder.WriteString(pr.End)
